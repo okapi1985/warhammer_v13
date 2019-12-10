@@ -52,7 +52,9 @@ public class UnitImpl implements Unit {
     }
 
     public void printUnit(Unit unit) {
-
+//        for (Map.Entry<Integer, Map<Integer, Model>> entry: unit.getUnitMap().entrySet()){
+//            System.out.println(entry.getValue());
+//        }
     }
 
     public void removeModel(Unit unit) {
@@ -77,8 +79,6 @@ public class UnitImpl implements Unit {
                 }
             }
         }
-
-
     }
 
     public int size() {
@@ -117,6 +117,15 @@ public class UnitImpl implements Unit {
         this.standardBearer = standardBearer;
     }
 
+    @Override
+    public int getUnitValue() {
+        return unitValue;
+    }
+
+    public void setUnitValue(int unitValue) {
+        this.unitValue = unitValue;
+    }
+
     private UnitImpl(){
     }
 
@@ -130,6 +139,7 @@ public class UnitImpl implements Unit {
         this.unitMap = unitMap;
     }
 
+    private int unitValue;
     private boolean musician;
     private boolean standardBearer;
     private TreeMap<Integer, Map<Integer, Model>> unitMap = new TreeMap<>();

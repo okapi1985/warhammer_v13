@@ -16,5 +16,6 @@ public interface Unit {
     void setMusician(boolean musician);
     boolean isStandardBearer();
     void setStandardBearer(boolean standardBearer);
-
+    int getUnitValue();
+    void setUnitValue(int unitValue);
 }
