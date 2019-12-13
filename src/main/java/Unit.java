@@ -18,4 +18,5 @@ public interface Unit {
     void setStandardBearer(boolean standardBearer);
     int getUnitValue();
     void setUnitValue(int unitValue);
+    int compareTo(Unit o);
 }

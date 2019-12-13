@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class UnitImpl implements Unit {
+public class UnitImpl implements Unit, Comparable<Unit> {
 
     public static Unit create(){
         return new UnitImpl();
@@ -126,6 +126,14 @@ public class UnitImpl implements Unit {
         this.unitValue = unitValue;
     }
 
+    @Override
+    public int compareTo(Unit o) {
+        if (this.getUnitMap().get(0).get(0).getInitiative() < o.getUnitMap().get(0).get(0).getInitiative()){
+            return -1;
+        } else
+            return 1;
+    }
+
     private UnitImpl(){
     }
 
@@ -143,4 +151,5 @@ public class UnitImpl implements Unit {
     private boolean musician;
     private boolean standardBearer;
     private TreeMap<Integer, Map<Integer, Model>> unitMap = new TreeMap<>();
+
 }
