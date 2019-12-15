@@ -5,13 +5,6 @@ import java.util.List;
 public class CloseCombatImpl implements CloseCombat {
 
     private List<Unit> initRankingList = new ArrayList<>();
-    private int attackerHits = 0;
-    private int attackerWounds = 0;
-    private int defendersFallen = 0;
-    private int defenderHits = 0;
-    private int defenderWounds = 0;
-    private int attackersFallen = 0;
-
 
     public static CloseCombat create(){
         return new CloseCombatImpl();
@@ -35,6 +28,7 @@ public class CloseCombatImpl implements CloseCombat {
         int weaponSkillTest = modelAttackFirst.getWeaponSkill() - modelAttackLast.getWeaponSkill();
         int attacksAmount = modelAttackFirst.getAttack();
         int attackersAmount = initRankingList.get(0).getUnitMap().get(0).size();
+        int attackerHits = 0;
 
         for (int i = 0; i < attackersAmount; i++) {
             for (int j = 0; j < attacksAmount; j++) {
@@ -51,10 +45,11 @@ public class CloseCombatImpl implements CloseCombat {
     }
 
     @Override
-    public int attackersWoundsAmount(List<Unit> initRankingList) {
+    public int attackersWoundsAmount(List<Unit> initRankingList, int attackerHits) {
         Model modelAttackFirst = initRankingList.get(0).getUnitMap().get(0).get(0);
         Model modelAttackLast = initRankingList.get(1).getUnitMap().get(0).get(0);
         int strengthTest = modelAttackFirst.getStrength() - modelAttackLast.getToughness();
+        int attackerWounds = 0;
 
         while (attackerHits > 0) {
             if ((strengthTest >= 2 && DiceD6.rollDice() >= 2) ||
@@ -74,11 +69,12 @@ public class CloseCombatImpl implements CloseCombat {
     }
 
     @Override
-    public int defendersFallenAmount(List<Unit> initRankingList) {
+    public int defendersFallenAmount(List<Unit> initRankingList, int attackerWounds) {
         Model modelAttackFirst = initRankingList.get(0).getUnitMap().get(0).get(0);
         Model modelAttackLast = initRankingList.get(1).getUnitMap().get(0).get(0);
         int modifier = modelAttackFirst.getStrength() - 3;
         int save = modelAttackLast.getSave();
+        int defendersFallen = 0;
 
         if (modifier < 0) {
             modifier = 0;
@@ -110,32 +106,37 @@ public class CloseCombatImpl implements CloseCombat {
     }
 
     @Override
-    public int defendersHitsAmount(List<Unit> initRankingList) {
+    public int defendersHitsAmount(List<Unit> initRankingList, int defendersFallen) {
         Model modelAttackFirst = initRankingList.get(0).getUnitMap().get(0).get(0);
         Model modelAttackLast = initRankingList.get(1).getUnitMap().get(0).get(0);
         int weaponSkillTest = modelAttackLast.getWeaponSkill() - modelAttackFirst.getWeaponSkill();
         int attacksAmount = modelAttackLast.getAttack();
-        int attackersAmount = initRankingList.get(1).getUnitMap().get(0).size();
+        int attackersAmount = initRankingList.get(1).getUnitMap().get(0).size() - defendersFallen;
+        int defenderHits = 0;
 
-        for (int i = 0; i < attackersAmount; i++) {
-            for (int j = 0; j < attacksAmount; j++) {
-                if ((weaponSkillTest >= 1 && DiceD6.rollDice() >= 3) ||
-                        ((weaponSkillTest < 1 && (modelAttackFirst.getWeaponSkill() / modelAttackLast.getWeaponSkill()) < 2) && DiceD6.rollDice() >= 4) ||
-                        (modelAttackFirst.getWeaponSkill() / modelAttackLast.getWeaponSkill()) >= 2 && DiceD6.rollDice() >= 5) {
-                    System.out.println(modelAttackLast.getName() + " trafił " + modelAttackFirst.getName());
-                    defenderHits += 1;
-                } else
-                    System.out.println(modelAttackLast.getName() + " nie trafił " + modelAttackFirst.getName());
+        if(attackersAmount > 0) {
+            for (int i = 0; i < attackersAmount; i++) {
+                for (int j = 0; j < attacksAmount; j++) {
+                    if ((weaponSkillTest >= 1 && DiceD6.rollDice() >= 3) ||
+                            ((weaponSkillTest < 1 && (modelAttackFirst.getWeaponSkill() / modelAttackLast.getWeaponSkill()) < 2) && DiceD6.rollDice() >= 4) ||
+                            (modelAttackFirst.getWeaponSkill() / modelAttackLast.getWeaponSkill()) >= 2 && DiceD6.rollDice() >= 5) {
+                        System.out.println(modelAttackLast.getName() + " trafił " + modelAttackFirst.getName());
+                        defenderHits += 1;
+                    } else
+                        System.out.println(modelAttackLast.getName() + " nie trafił " + modelAttackFirst.getName());
+                }
             }
-        }
-        return defenderHits;
+            return defenderHits;
+        } else
+            return 0;
     }
 
     @Override
-    public int defendersWoundsAmount(List<Unit> initRankingList) {
+    public int defendersWoundsAmount(List<Unit> initRankingList, int defenderHits) {
         Model modelAttackFirst = initRankingList.get(0).getUnitMap().get(0).get(0);
         Model modelAttackLast = initRankingList.get(1).getUnitMap().get(0).get(0);
         int strengthTest = modelAttackLast.getStrength() - modelAttackFirst.getToughness();
+        int defenderWounds = 0;
 
         while (defenderHits > 0) {
             if ((strengthTest >= 2 && DiceD6.rollDice() >= 2) ||
@@ -155,11 +156,12 @@ public class CloseCombatImpl implements CloseCombat {
     }
 
     @Override
-    public int attackersFallenAmount(List<Unit> initRankingList) {
+    public int attackersFallenAmount(List<Unit> initRankingList, int defenderWounds) {
         Model modelAttackFirst = initRankingList.get(0).getUnitMap().get(0).get(0);
         Model modelAttackLast = initRankingList.get(1).getUnitMap().get(0).get(0);
         int modifier = modelAttackLast.getStrength() - 3;
         int save = modelAttackFirst.getSave();
+        int attackersFallen = 0;
 
         if (modifier < 0) {
             modifier = 0;
@@ -191,8 +193,59 @@ public class CloseCombatImpl implements CloseCombat {
     }
 
     @Override
-    public int unitCombatResult(List<Model> attackersFallen, List<Model> defendersFallen) {
-        return 0;
+    public int unitCombatResult(Unit unit1, Unit unit2, int attackersFallen, int defendersFallen) {
+        int unit1Points = 0;
+        int unit2Points = 0;
+        int unit1Us = 0;
+        int unit2Us = 0;
+        int ldModifier;
+
+        for (int i=0; i < unit1.getUnitMap().size(); i++){
+            unit1Us += unit1.getUnitMap().get(i).size();
+        }
+        for (int i=0; i < unit2.getUnitMap().size(); i++){
+            unit2Us += unit2.getUnitMap().get(i).size();
+        }
+
+        if (unit1Us > unit2Us) {
+            unit1Points += 1;
+        } else if (unit1Us < unit2Us) {
+            unit2Points += 1;
+        }
+
+        if (unit1.getUnitMap().size() > 1 && unit1.getUnitMap().size() < 5){
+            for (int i=0; i < 3; i++){
+                if (unit1.getUnitMap().get(i+1).size() >= 5){
+                    //rzuca wyjątek bo próbuje pobrać nieistniejący index. Trzeba tu zmienić implementację
+                    unit1Points += 1;
+                }
+            }
+        } else if (unit1.getUnitMap().size() >= 5 && unit1.getUnitMap().get(3).size() >= 5){
+            unit1Points += 3;
+        }
+        if (unit2.getUnitMap().size() > 1 && unit2.getUnitMap().size() < 5){
+            for (int i=0; i < 3; i++){
+                if (unit2.getUnitMap().get(i+1).size() >= 5){
+                    unit2Points += 1;
+                }
+            }
+        } else if (unit2.getUnitMap().size() >= 5 && unit2.getUnitMap().get(3).size() >= 5){
+            unit2Points += 3;
+        }
+
+        if (unit1.isStandardBearer()){
+            unit1Points += 1;
+        }
+        if (unit2.isStandardBearer()){
+            unit2Points += 1;
+        }
+
+        int total1 = unit1Points + defendersFallen;
+        int total2 = unit2Points + attackersFallen;
+
+        ldModifier = total1 - total2;
+
+        return Math.abs(ldModifier);
     }
 
     @Override

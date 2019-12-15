@@ -15,10 +15,10 @@ public class CloseCombatImplTest {
     public void before(){
         closeCombat = CloseCombatImpl.create();
         unit = UnitImpl.create();
-        model1 = new ModelImpl("Clanrat",5,3,3,3,3,
+        Model model1 = new ModelImpl("Clanrat",5,3,3,3,3,
                 1,5,1,5,1,5,1);
-        model2 = new ModelImpl("Clansman",3,4,3,3,4,
-                1,2,1,9,1,6,1);
+        Model model2 = new ModelImpl("Clansman",3,4,3,3,4,
+                1,2,1,9,1,4,1);
         unit1 = unit.createUnit(model1,4,4);
         unit2 = unit.createUnit(model2,4,4);
         initRankingList = closeCombat.initiativeTest(unit1,unit2);
@@ -27,13 +27,13 @@ public class CloseCombatImplTest {
     }
 
     @Test
-    public void testOfInitiativeTest(){
+    public void testOfInitiative(){
         assertThat(initRankingList.get(0)).isEqualTo(unit1);
         //Co jeśli będzie równa inicjatywa?
     }
 
     @Test
-    public void testOfAttackerHitTest(){
+    public void testOfAttackerHit(){
         int attackersAmount = initRankingList.get(0).getUnitMap().get(0).size();
         int modelAttackAmount = initRankingList.get(0).getUnitMap().get(0).get(0).getAttack();
         int attempsAmount = attackersAmount*modelAttackAmount;
@@ -41,18 +41,71 @@ public class CloseCombatImplTest {
         assertThat(attackerHits).isBetween(0,attempsAmount);
     }
 
-//    @Test
-//    public void testOfAttackerWoundTest(){
-//        System.out.println();
-//        List<Model> listOfAttackersHit = new ArrayList<>(Arrays.asList(model1,model1,model1));
-//        List<Model> listOfAttackersWound = closeCombat.attackerWoundTest(initRankingList);
-//        assertThat(listOfAttackersWound.size()).isBetween(1,3);
-//    }
+    @Test
+    public void testOfAttackerWound(){
+        int attackerHits = 3;
+        int attackerWounds = closeCombat.attackersWoundsAmount(initRankingList,attackerHits);
+        assertThat(attackerHits).isBetween(0,attackerHits);
+    }
+
+    @Test
+    public void testOfDefenderSave(){
+        int attackerWounds = 2;
+        int defendersFallen = closeCombat.defendersFallenAmount(initRankingList,attackerWounds);
+        assertThat(defendersFallen).isBetween(0,attackerWounds);
+    }
+
+    @Test
+    public void testOfDefenderHit(){
+        int defendersFallen = 2;
+        int defendersAmount = initRankingList.get(1).getUnitMap().get(0).size() - defendersFallen;
+        int modelAttackAmount = initRankingList.get(1).getUnitMap().get(0).get(0).getAttack();
+        int attempsAmount = defendersAmount*modelAttackAmount;
+        int defenderHits = closeCombat.defendersHitsAmount(initRankingList,defendersFallen);
+        assertThat(defenderHits).isBetween(0,attempsAmount);
+    }
+
+    @Test
+    public void testOfDefenderWound(){
+        int defenderHits = 3;
+        int defenderWounds = closeCombat.defendersWoundsAmount(initRankingList,defenderHits);
+        assertThat(defenderWounds).isBetween(0,defenderHits);
+    }
+
+    @Test
+    public void testOfAttackerSave(){
+        int defenderWounds = 1;
+        int attackersFallen = closeCombat.attackersFallenAmount(initRankingList,defenderWounds);
+        assertThat(attackersFallen).isBetween(0,defenderWounds);
+    }
+
+    @Test
+    public void calculateResultForUnit1(){
+        Model model3 = new ModelImpl("Clanrat",5,3,3,3,3,
+                1,5,1,5,1,5,1);
+        Model model4 = new ModelImpl("Clansman",3,4,3,3,4,
+                1,2,1,9,1,4,1);
+        Unit unit3 = unit.createUnit(model3,3,5);
+        Unit unit4 = unit.createUnit(model4,2,5);
+        int attackersFallen = 2;
+        int defendersFallen = 1;
+
+        assertThat(closeCombat.unitCombatResult(unit3,unit4,attackersFallen,defendersFallen)).isEqualTo(3);
+    }
+
+    @Test
+    public void combatResultCalculation(){
+        int attackersFallen = 2;
+        int defendersFallen = 1;
+        unit1.setStandardBearer(true);
+        unit2.setStandardBearer(true);
+
+        assertThat(closeCombat.unitCombatResult(unit1,unit2,attackersFallen,defendersFallen)).isEqualTo(1);
+    }
+
 
     private CloseCombat closeCombat;
     private Unit unit;
-    private Model model1;
-    private Model model2;
     private Unit unit1;
     private Unit unit2;
     List<Unit> initRankingList = new ArrayList<>();
