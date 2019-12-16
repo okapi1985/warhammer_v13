@@ -2,10 +2,11 @@
 
 import com.google.common.base.Preconditions;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class UnitImpl implements Unit, Comparable<Unit> {
+public class UnitImpl implements Unit {
 
     public static Unit create(){
         return new UnitImpl();
@@ -117,6 +118,14 @@ public class UnitImpl implements Unit, Comparable<Unit> {
         this.standardBearer = standardBearer;
     }
 
+    public boolean isWonLastFight(){
+        return wonLastFight;
+    }
+
+    public void setWonLastFight(boolean wonLastFight){
+        this.wonLastFight = wonLastFight;
+    }
+
     @Override
     public int getUnitValue() {
         return unitValue;
@@ -126,12 +135,11 @@ public class UnitImpl implements Unit, Comparable<Unit> {
         this.unitValue = unitValue;
     }
 
-    @Override
-    public int compareTo(Unit o) {
-        if (this.getUnitMap().get(0).get(0).getInitiative() < o.getUnitMap().get(0).get(0).getInitiative()){
-            return -1;
-        } else
-            return 1;
+    public static class UnitInitiativeComparator implements Comparator<UnitImpl> {
+        @Override
+        public int compare(UnitImpl unit1, UnitImpl unit2) {
+            return unit1.getUnitMap().get(0).get(0).getInitiative() - unit2.getUnitMap().get(0).get(0).getInitiative();
+        }
     }
 
     private UnitImpl(){
@@ -143,6 +151,14 @@ public class UnitImpl implements Unit, Comparable<Unit> {
         this.unitMap = unitMap;
     }
 
+    public UnitImpl(int unitValue, boolean musician, boolean standardBearer, boolean wonLastFight, TreeMap<Integer, Map<Integer, Model>> unitMap) {
+        this.unitValue = unitValue;
+        this.musician = musician;
+        this.standardBearer = standardBearer;
+        this.wonLastFight = wonLastFight;
+        this.unitMap = unitMap;
+    }
+
     private UnitImpl(TreeMap<Integer, Map<Integer, Model>> unitMap) {
         this.unitMap = unitMap;
     }
@@ -150,6 +166,7 @@ public class UnitImpl implements Unit, Comparable<Unit> {
     private int unitValue;
     private boolean musician;
     private boolean standardBearer;
+    private boolean wonLastFight;
     private TreeMap<Integer, Map<Integer, Model>> unitMap = new TreeMap<>();
 
 }

@@ -16,7 +16,8 @@ public interface Unit {
     void setMusician(boolean musician);
     boolean isStandardBearer();
     void setStandardBearer(boolean standardBearer);
+    boolean isWonLastFight();
+    void setWonLastFight(boolean wonLastFight);
     int getUnitValue();
     void setUnitValue(int unitValue);
-    int compareTo(Unit o);
 }

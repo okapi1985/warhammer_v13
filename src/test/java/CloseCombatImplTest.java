@@ -80,21 +80,21 @@ public class CloseCombatImplTest {
     }
 
     @Test
-    public void calculateResultForUnit1(){
+    public void calculateResultDifferentUnitSize(){
         Model model3 = new ModelImpl("Clanrat",5,3,3,3,3,
-                1,5,1,5,1,5,1);
+                1,5,1,5,1,5,5);
         Model model4 = new ModelImpl("Clansman",3,4,3,3,4,
-                1,2,1,9,1,4,1);
+                1,2,1,9,1,4,7);
         Unit unit3 = unit.createUnit(model3,3,5);
         Unit unit4 = unit.createUnit(model4,2,5);
-        int attackersFallen = 2;
         int defendersFallen = 1;
+        int attackersFallen = 2;
 
-        assertThat(closeCombat.unitCombatResult(unit3,unit4,attackersFallen,defendersFallen)).isEqualTo(3);
+        assertThat(closeCombat.unitCombatResult(unit3,unit4,attackersFallen,defendersFallen)).isEqualTo(1);
     }
 
     @Test
-    public void combatResultCalculation(){
+    public void combatResultSameUnitSize(){
         int attackersFallen = 2;
         int defendersFallen = 1;
         unit1.setStandardBearer(true);

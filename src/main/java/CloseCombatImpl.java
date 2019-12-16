@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class CloseCombatImpl implements CloseCombat {
 
-    private List<Unit> initRankingList = new ArrayList<>();
+//    private List<Unit> initRankingList = new ArrayList<>();
 
     public static CloseCombat create(){
         return new CloseCombatImpl();
@@ -15,9 +16,11 @@ public class CloseCombatImpl implements CloseCombat {
 
     @Override
     public List<Unit> initiativeTest(Unit unit1, Unit unit2) {
+        List<Unit> initRankingList = new ArrayList<>();
         initRankingList.add(unit1);
         initRankingList.add(unit2);
-        Collections.sort(initRankingList,Collections.reverseOrder());
+
+        Collections.sort(initRankingList,new UnitImpl.UnitInitiativeComparator());
         return initRankingList;
     }
 
@@ -200,39 +203,57 @@ public class CloseCombatImpl implements CloseCombat {
         int unit2Us = 0;
         int ldModifier;
 
+        //1#
         for (int i=0; i < unit1.getUnitMap().size(); i++){
             unit1Us += unit1.getUnitMap().get(i).size();
         }
         for (int i=0; i < unit2.getUnitMap().size(); i++){
             unit2Us += unit2.getUnitMap().get(i).size();
         }
-
         if (unit1Us > unit2Us) {
             unit1Points += 1;
         } else if (unit1Us < unit2Us) {
             unit2Points += 1;
         }
 
-        if (unit1.getUnitMap().size() > 1 && unit1.getUnitMap().size() < 5){
-            for (int i=0; i < 3; i++){
-                if (unit1.getUnitMap().get(i+1).size() >= 5){
-                    //rzuca wyjątek bo próbuje pobrać nieistniejący index. Trzeba tu zmienić implementację
-                    unit1Points += 1;
-                }
+        //2#
+        if (unit1.getUnitMap().size() == 2 && unit1.getUnitMap().get(1).size() >= 5) {
+            unit1Points += 1;
+        } else if (unit1.getUnitMap().size() == 3){
+            if (unit1.getUnitMap().get(2).size() >= 5){
+                unit1Points += 2;
+            } else if (unit1.getUnitMap().get(2).size() < 5 && unit1.getUnitMap().get(1).size() >= 5){
+                unit1Points += 1;
             }
-        } else if (unit1.getUnitMap().size() >= 5 && unit1.getUnitMap().get(3).size() >= 5){
-            unit1Points += 3;
-        }
-        if (unit2.getUnitMap().size() > 1 && unit2.getUnitMap().size() < 5){
-            for (int i=0; i < 3; i++){
-                if (unit2.getUnitMap().get(i+1).size() >= 5){
-                    unit2Points += 1;
-                }
+        } else if (unit1.getUnitMap().size() >=4) {
+            if (unit1.getUnitMap().get(3).size() >= 5) {
+                unit1Points += 3;
+            } else if (unit1.getUnitMap().get(3).size() < 5 && unit1.getUnitMap().get(2).size() >= 5) {
+                unit1Points += 2;
+            } else if (unit1.getUnitMap().get(2).size() < 5 && unit1.getUnitMap().get(1).size() >= 5) {
+                unit1Points += 1;
             }
-        } else if (unit2.getUnitMap().size() >= 5 && unit2.getUnitMap().get(3).size() >= 5){
-            unit2Points += 3;
         }
 
+        if (unit2.getUnitMap().size() == 2 && unit2.getUnitMap().get(1).size() >= 5) {
+            unit2Points += 1;
+        } else if (unit2.getUnitMap().size() == 3){
+            if (unit2.getUnitMap().get(2).size() >= 5){
+                unit2Points += 2;
+            } else if (unit2.getUnitMap().get(2).size() < 5 && unit2.getUnitMap().get(1).size() >= 5){
+                unit2Points += 1;
+            }
+        } else if (unit2.getUnitMap().size() >=4) {
+            if (unit2.getUnitMap().get(3).size() >= 5) {
+                unit2Points += 3;
+            } else if (unit2.getUnitMap().get(3).size() < 5 && unit2.getUnitMap().get(2).size() >= 5) {
+                unit2Points += 2;
+            } else if (unit2.getUnitMap().get(2).size() < 5 && unit2.getUnitMap().get(1).size() >= 5) {
+                unit2Points += 1;
+            }
+        }
+
+        //3#
         if (unit1.isStandardBearer()){
             unit1Points += 1;
         }
