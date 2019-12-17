@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Map;
 
 public interface CloseCombat {
 
@@ -9,6 +10,6 @@ public interface CloseCombat {
     int defendersHitsAmount(List<Unit> initRankingList, int defendersFallen);
     int defendersWoundsAmount(List<Unit> initRankingList, int defenderHits);
     int attackersFallenAmount(List<Unit> initRankingList, int defenderWounds);
-    int unitCombatResult(Unit unit1, Unit unit2, int attackersFallen, int defendersFallen);
+    Map<Unit, Integer> unitCombatResult(Unit unit1, Unit unit2, int attackersFallen, int defendersFallen);
     void leadershipTest(Unit unit);
 }

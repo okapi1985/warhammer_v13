@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CloseCombatImpl implements CloseCombat {
 
@@ -20,7 +17,7 @@ public class CloseCombatImpl implements CloseCombat {
         initRankingList.add(unit1);
         initRankingList.add(unit2);
 
-        Collections.sort(initRankingList,new UnitImpl.UnitInitiativeComparator());
+        Collections.sort(initRankingList, UnitImpl.UnitModelInit);
         return initRankingList;
     }
 
@@ -196,7 +193,8 @@ public class CloseCombatImpl implements CloseCombat {
     }
 
     @Override
-    public int unitCombatResult(Unit unit1, Unit unit2, int attackersFallen, int defendersFallen) {
+    public Map<Unit, Integer> unitCombatResult(Unit unit1, Unit unit2, int attackersFallen, int defendersFallen) {
+        Map<Unit, Integer> combatResultMap = new TreeMap<>();
         int unit1Points = 0;
         int unit2Points = 0;
         int unit1Us = 0;
@@ -264,9 +262,28 @@ public class CloseCombatImpl implements CloseCombat {
         int total1 = unit1Points + defendersFallen;
         int total2 = unit2Points + attackersFallen;
 
-        ldModifier = total1 - total2;
+        if (total1 > total2){
+            combatResultMap.put(unit1,total1);
+            combatResultMap.put(unit2,total2);
+            unit1.setWonLastFight(true);
+        } else if (total1 < total2){
+            combatResultMap.put(unit2,total2);
+            combatResultMap.put(unit1,total1);
+            unit2.setWonLastFight(true);
+        } else {
+            if (unit1.isMusician() && !unit2.isMusician()){
+                combatResultMap.put(unit1,total1);
+                combatResultMap.put(unit2,total2);
+                unit1.setWonLastFight(true);
+            } else if (!unit1.isMusician() && unit2.isMusician()){
+                combatResultMap.put(unit2,total2);
+                combatResultMap.put(unit1,total1);
+                unit2.setWonLastFight(true);
+            } else
+                System.out.println("Brak rozstrzygnięcia starcia");
+        }
 
-        return Math.abs(ldModifier);
+        return combatResultMap;
     }
 
     @Override

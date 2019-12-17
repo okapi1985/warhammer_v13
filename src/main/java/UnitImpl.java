@@ -135,12 +135,11 @@ public class UnitImpl implements Unit {
         this.unitValue = unitValue;
     }
 
-    public static class UnitInitiativeComparator implements Comparator<UnitImpl> {
-        @Override
-        public int compare(UnitImpl unit1, UnitImpl unit2) {
-            return unit1.getUnitMap().get(0).get(0).getInitiative() - unit2.getUnitMap().get(0).get(0).getInitiative();
-        }
-    }
+    public static Comparator<Unit> UnitModelInit =
+            Comparator.comparingInt(unit -> -unit.getUnitMap().get(0).get(0).getInitiative());
+
+    //public static Comparator<Unit> UnitCombatResult =
+
 
     private UnitImpl(){
     }
