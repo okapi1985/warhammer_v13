@@ -128,6 +128,7 @@ public class UnitImpl implements Unit {
 
     @Override
     public int getUnitValue() {
+
         return unitValue;
     }
 
@@ -135,11 +136,15 @@ public class UnitImpl implements Unit {
         this.unitValue = unitValue;
     }
 
+    @Override
+    public int countUnitValue(Unit unit) {
+        Preconditions.checkArgument(unitMap != null, "Unit map cannot be null");
+        unitValue = size()*rankSize(unit)*(getModel(unit).getPoints());
+        return unitValue;
+    }
+
     public static Comparator<Unit> UnitModelInit =
             Comparator.comparingInt(unit -> -unit.getUnitMap().get(0).get(0).getInitiative());
-
-    //public static Comparator<Unit> UnitCombatResult =
-
 
     private UnitImpl(){
     }

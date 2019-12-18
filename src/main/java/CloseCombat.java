@@ -11,5 +11,5 @@ public interface CloseCombat {
     int defendersWoundsAmount(List<Unit> initRankingList, int defenderHits);
     int attackersFallenAmount(List<Unit> initRankingList, int defenderWounds);
     Map<Unit, Integer> unitCombatResult(Unit unit1, Unit unit2, int attackersFallen, int defendersFallen);
-    void leadershipTest(Unit unit);
+    void leadershipTest(Map<Unit, Integer> combatResultMap);
 }

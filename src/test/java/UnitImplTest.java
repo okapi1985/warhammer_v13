@@ -133,6 +133,14 @@ public class UnitImplTest {
         assertTrue(unit.isStandardBearer());
     }
 
+    @Test
+    public void countUnitValue(){
+        model.setPoints(7);
+        unit.createUnit(model,4,5);
+
+        assertThat(unit.countUnitValue(unit)).isEqualTo(140);
+    }
+
 
     private Unit unit;
     private @Nonnull Model model;

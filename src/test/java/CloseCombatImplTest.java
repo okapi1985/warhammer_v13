@@ -1,11 +1,10 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -89,18 +88,20 @@ public class CloseCombatImplTest {
         Unit unit4 = unit.createUnit(model4,2,5);
         int defendersFallen = 1;
         int attackersFallen = 2;
+        Map<Unit, Integer> combatResultMap = closeCombat.unitCombatResult(unit3,unit4,attackersFallen,defendersFallen);
 
-        assertThat(closeCombat.unitCombatResult(unit3,unit4,attackersFallen,defendersFallen)).isEqualTo(1);
+        assertThat(combatResultMap).containsExactly(entry(unit3,4),entry(unit4,3));
     }
 
     @Test
     public void combatResultSameUnitSize(){
-        int attackersFallen = 2;
         int defendersFallen = 1;
+        int attackersFallen = 2;
         unit1.setStandardBearer(true);
         unit2.setStandardBearer(true);
+        Map<Unit, Integer> combatResultMap = closeCombat.unitCombatResult(unit1,unit2,attackersFallen,defendersFallen);
 
-        assertThat(closeCombat.unitCombatResult(unit1,unit2,attackersFallen,defendersFallen)).isEqualTo(1);
+        assertThat(combatResultMap).containsExactly(entry(unit2,3),entry(unit1,2));
     }
 
 

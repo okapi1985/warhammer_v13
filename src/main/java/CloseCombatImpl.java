@@ -194,12 +194,11 @@ public class CloseCombatImpl implements CloseCombat {
 
     @Override
     public Map<Unit, Integer> unitCombatResult(Unit unit1, Unit unit2, int attackersFallen, int defendersFallen) {
-        Map<Unit, Integer> combatResultMap = new TreeMap<>();
+        Map<Unit, Integer> combatResultMap = new LinkedHashMap<>();
         int unit1Points = 0;
         int unit2Points = 0;
         int unit1Us = 0;
         int unit2Us = 0;
-        int ldModifier;
 
         //1#
         for (int i=0; i < unit1.getUnitMap().size(); i++){
@@ -287,8 +286,16 @@ public class CloseCombatImpl implements CloseCombat {
     }
 
     @Override
-    public void leadershipTest(Unit unit) {
+    public void leadershipTest(Map<Unit, Integer> combatResultMap) {
+        int firstResult = combatResultMap.values().stream().findFirst().get();
+        int lastResult = combatResultMap.values().stream().skip(1).findFirst().get();
+        int ldModifier = firstResult - lastResult;
+        Unit unitLost = combatResultMap.keySet().stream().skip(1).findFirst().get();
 
+        if ((unitLost.getUnitMap().get(0).get(0).getLeadership() - ldModifier) >= (DiceD6.rollDice()+DiceD6.rollDice())){
+            System.out.println("Oddział "+unitLost.getUnitMap().get(0).get(0).getName()+" utrzymał szyk");
+        } else
+            System.out.println("Oddział "+unitLost.getUnitMap().get(0).get(0).getName()+" rzucił się do ucieczki!");
     }
 
 }
