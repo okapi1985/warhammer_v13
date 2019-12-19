@@ -135,10 +135,20 @@ public class UnitImplTest {
 
     @Test
     public void countUnitValue(){
-        model.setPoints(7);
-        unit.createUnit(model,4,5);
+        model = new ModelImpl("Clanrat",5,3,3,3,3,
+                1,5,1,5,1,5,5);
+        unit = unit.createUnit(model,4,5);
 
-        assertThat(unit.countUnitValue(unit)).isEqualTo(140);
+        assertThat(unit.getUnitValue()).isEqualTo(100);
+    }
+
+    @Test
+    public void countTotalUnitStrength(){
+        model = new ModelImpl("Clanrat",5,3,3,3,3,
+                1,5,1,5,1,5,5);
+        unit = unit.createUnit(model,4,5);
+
+        assertThat(unit.countTotalUnitStrength(unit)).isEqualTo(20);
     }
 
 

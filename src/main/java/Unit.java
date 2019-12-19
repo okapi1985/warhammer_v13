@@ -20,5 +20,5 @@ public interface Unit {
     void setWonLastFight(boolean wonLastFight);
     int getUnitValue();
     void setUnitValue(int unitValue);
-    int countUnitValue(Unit unit);
+    int countTotalUnitStrength(Unit unit);
 }

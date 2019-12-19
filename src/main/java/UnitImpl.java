@@ -128,19 +128,19 @@ public class UnitImpl implements Unit {
 
     @Override
     public int getUnitValue() {
-
+        unitValue = getUnitMap().size() * getUnitMap().get(0).size() * getUnitMap().get(0).get(0).getPoints();
         return unitValue;
     }
 
     public void setUnitValue(int unitValue) {
+        Preconditions.checkArgument(unitValue > 0, "Unit value cannot be negative or zero");
         this.unitValue = unitValue;
     }
 
     @Override
-    public int countUnitValue(Unit unit) {
-        Preconditions.checkArgument(unitMap != null, "Unit map cannot be null");
-        unitValue = size()*rankSize(unit)*(getModel(unit).getPoints());
-        return unitValue;
+    public int countTotalUnitStrength(Unit unit) {
+        int totalUS = size() * rankSize(unit) * getModel(unit).getUnitStrength();
+        return totalUS;
     }
 
     public static Comparator<Unit> UnitModelInit =
