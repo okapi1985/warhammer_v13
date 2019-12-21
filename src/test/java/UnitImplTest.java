@@ -151,6 +151,17 @@ public class UnitImplTest {
         assertThat(unit.countTotalUnitStrength(unit)).isEqualTo(20);
     }
 
+    @Test
+    public void countClanratUnitValue(){
+        model = new Clanrat("Clanrat",5,3,3,3,3,
+                1,5,1,5,1,5,5,
+                false,false,false,false);
+        ((Clanrat) model).setSpear(true);
+        unit = unit.createUnit(model,4,5);
+
+        assertThat(unit.getUnitValue()).isEqualTo(120);
+    }
+
 
     private Unit unit;
     private @Nonnull Model model;
