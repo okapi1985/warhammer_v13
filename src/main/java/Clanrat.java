@@ -16,6 +16,7 @@ public class Clanrat extends ModelImpl {
         this.lightArmour = lightArmour;
         this.shield = shield;
         this.spear = spear;
+        //setLeadership(getLeadership() + specialRuleStrengthInNumbers(UnitImpl clanratUnit));
     }
 
     public boolean isHandWeapon() {
@@ -62,6 +63,28 @@ public class Clanrat extends ModelImpl {
         //TODO
         //for infantry second rank fights as well in round when not charging
     }
+
+//    public int specialRuleStrengthInNumbers(UnitImpl clanratUnit){
+//        int leadershipBonus = 0;
+//        if (clanratUnit.getUnitMap().size() == 2 && clanratUnit.getUnitMap().get(1).size() >= 5) {
+//            leadershipBonus = 1;
+//        } else if (clanratUnit.getUnitMap().size() == 3){
+//            if (clanratUnit.getUnitMap().get(2).size() >= 5){
+//                leadershipBonus = 2;
+//            } else if (clanratUnit.getUnitMap().get(2).size() < 5 && clanratUnit.getUnitMap().get(1).size() >= 5){
+//                leadershipBonus = 1;
+//            }
+//        } else if (clanratUnit.getUnitMap().size() >=4) {
+//            if (clanratUnit.getUnitMap().get(3).size() >= 5) {
+//                leadershipBonus = 3;
+//            } else if (clanratUnit.getUnitMap().get(3).size() < 5 && clanratUnit.getUnitMap().get(2).size() >= 5) {
+//                leadershipBonus = 2;
+//            } else if (clanratUnit.getUnitMap().get(2).size() < 5 && clanratUnit.getUnitMap().get(1).size() >= 5) {
+//                leadershipBonus = 1;
+//            }
+//        }
+//        return leadershipBonus;
+//    }
 
     @Override
     public String toString() {

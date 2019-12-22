@@ -53,9 +53,9 @@ public class UnitImpl implements Unit {
     }
 
     public void printUnit(Unit unit) {
-//        for (Map.Entry<Integer, Map<Integer, Model>> entry: unit.getUnitMap().entrySet()){
-//            System.out.println(entry.getValue());
-//        }
+        for (Map.Entry<Integer, Map<Integer, Model>> entry: unit.getUnitMap().entrySet()){
+            System.out.println(entry.getValue());
+        }
     }
 
     public void removeModel(Unit unit) {
@@ -152,6 +152,13 @@ public class UnitImpl implements Unit {
     private UnitImpl(boolean musician, boolean standardBearer, TreeMap<Integer, Map<Integer, Model>> unitMap) {
         this.musician = musician;
         this.standardBearer = standardBearer;
+        this.unitMap = unitMap;
+    }
+
+    public UnitImpl(boolean musician, boolean standardBearer, boolean wonLastFight, TreeMap<Integer, Map<Integer, Model>> unitMap) {
+        this.musician = musician;
+        this.standardBearer = standardBearer;
+        this.wonLastFight = wonLastFight;
         this.unitMap = unitMap;
     }
 

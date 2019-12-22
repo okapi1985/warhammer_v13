@@ -292,6 +292,9 @@ public class CloseCombatImpl implements CloseCombat {
         int ldModifier = firstResult - lastResult;
         Unit unitLost = combatResultMap.keySet().stream().skip(1).findFirst().get();
 
+        System.out.println(unitLost.getUnitMap().get(0).get(0).getName()+" posiada współczynnik Ld: "
+                +unitLost.getUnitMap().get(0).get(0).getLeadership()+" zmodyfikowany o "+ldModifier);
+
         if ((unitLost.getUnitMap().get(0).get(0).getLeadership() - ldModifier) >= (DiceD6.rollDice()+DiceD6.rollDice())){
             System.out.println("Oddział "+unitLost.getUnitMap().get(0).get(0).getName()+" utrzymał szyk");
         } else
