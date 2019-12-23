@@ -7,11 +7,11 @@ public interface Unit {
     void addModel(Unit unit);
     Model getModel(Unit unit);
     void printUnit(Unit unit);
-    void removeModel(Unit unit);
+    void removeModel(Unit unit, int amountToRemove);
     int size();
     int rankSize(Unit unit);
     int lastRankIndex(Unit unit);
-    TreeMap<Integer, Map<Integer, Model>> getUnitMap();
+    TreeMap<Integer, TreeMap<Integer, Model>> getUnitMap();
     boolean isMusician();
     void setMusician(boolean musician);
     boolean isStandardBearer();

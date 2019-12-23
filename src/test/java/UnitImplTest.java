@@ -86,39 +86,32 @@ public class UnitImplTest {
     @Test
     public void removeFromLastRank(){
         unit = unit.createUnit(model,2,4);
-        unit.removeModel(unit);
+        int amountToRemove = 1;
+        unit.removeModel(unit,amountToRemove);
         assertThat(unit.getUnitMap().get(1).get(3)).isNull();
     }
 
     @Test
     public void removeFromSecondLastRank(){
         unit = unit.createUnit(model,2,4);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
+        int amountToRemove = 5;
+        unit.removeModel(unit,amountToRemove);
         assertThat(unit.getUnitMap().get(0).get(3)).isNull();
     }
 
     @Test
     public void removeFromOneRankUnitEqual(){
         unit = unit.createUnit(model,1,4);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
+        int amountToRemove = 4;
+        unit.removeModel(unit,amountToRemove);
         assertThat(unit.getUnitMap().size()).isZero();
     }
 
     @Test
     public void removeFromOneRankUnitTooMany(){
         unit = unit.createUnit(model,1,4);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
-        unit.removeModel(unit);
-        assertThrows(NullPointerException.class, () -> unit.removeModel(unit));
+        int amountToRemove = 5;
+        assertThrows(NullPointerException.class, () -> unit.removeModel(unit,amountToRemove));
     }
 
     @Test

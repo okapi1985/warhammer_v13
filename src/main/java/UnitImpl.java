@@ -17,8 +17,8 @@ public class UnitImpl implements Unit {
         Preconditions.checkArgument(model != null, "Model must not be null");
         Preconditions.checkArgument(ranksAmount >= 1, "Unit must have at least one rank");
         Preconditions.checkArgument(rankSize >= 3, "Rank must have at least three models");
-        Map<Integer, Model> rank = new TreeMap<>();
-        TreeMap<Integer, Map<Integer, Model>> unitMap = new TreeMap<>();
+        TreeMap<Integer, Model> rank = new TreeMap<>();
+        TreeMap<Integer, TreeMap<Integer, Model>> unitMap = new TreeMap<>();
         Unit unit = new UnitImpl(unitMap);
         for (int j = 0; j < ranksAmount; j++) {
             for (int i = 0; i < rankSize; i++) {
@@ -33,7 +33,7 @@ public class UnitImpl implements Unit {
         Preconditions.checkArgument(unit != null, "Unit must not be null");
         int lastRankSize = unit.getUnitMap().get(lastRankIndex(unit)).size();
         int secondLastRankSize = unit.getUnitMap().get(lastRankIndex(unit)-1).size();
-        TreeMap<Integer,Model> lastRank = (TreeMap<Integer, Model>) unit.getUnitMap().get(lastRankIndex(unit));
+        TreeMap<Integer,Model> lastRank = unit.getUnitMap().get(lastRankIndex(unit));
 
         if (unit.getUnitMap().size() == 1 || (lastRankSize == secondLastRankSize)) {
             TreeMap<Integer, Model> newRank = new TreeMap<>();
@@ -53,30 +53,28 @@ public class UnitImpl implements Unit {
     }
 
     public void printUnit(Unit unit) {
-        for (Map.Entry<Integer, Map<Integer, Model>> entry: unit.getUnitMap().entrySet()){
+        for (Map.Entry<Integer, TreeMap<Integer, Model>> entry: unit.getUnitMap().entrySet()){
             System.out.println(entry.getValue());
         }
     }
 
-    public void removeModel(Unit unit) {
+    public void removeModel(Unit unit, int amountToRemove) {
         Preconditions.checkArgument(unit != null, "Unit must not be null");
-        TreeMap<Integer,Model> lastRank = (TreeMap<Integer, Model>) unit.getUnitMap().get(lastRankIndex(unit));
-        TreeMap<Integer,Model> secondLastRank = (TreeMap<Integer, Model>) unit.getUnitMap().get(lastRankIndex(unit)-1);
 
-        if (lastRank.size() == 0) {
-            unit.getUnitMap().pollLastEntry();
-            if (unit.getUnitMap().size() > 0) {
-                secondLastRank.pollLastEntry();
-            }
-            else
-                System.out.println("Enemy unit has been killed off");
-        }
-        else {
-            lastRank.pollLastEntry();
-            if (lastRank.size() == 0){
+        for (int i = 0; i < amountToRemove; i++) {
+            if (unit.getUnitMap().get(lastRankIndex(unit)).size() == 0) {
                 unit.getUnitMap().pollLastEntry();
-                if (unit.getUnitMap().size() == 0){
+                if (unit.getUnitMap().size() > 0) {
+                    unit.getUnitMap().get(lastRankIndex(unit) - 1).pollLastEntry();
+                } else
                     System.out.println("Enemy unit has been killed off");
+            } else {
+                unit.getUnitMap().get(lastRankIndex(unit)).pollLastEntry();
+                if (unit.getUnitMap().get(lastRankIndex(unit)).size() == 0) {
+                    unit.getUnitMap().pollLastEntry();
+                    if (unit.getUnitMap().size() == 0) {
+                        System.out.println("Enemy unit has been killed off");
+                    }
                 }
             }
         }
@@ -98,7 +96,7 @@ public class UnitImpl implements Unit {
         return unit.getUnitMap().size()-1;
     }
 
-    public TreeMap<Integer, Map<Integer, Model>> getUnitMap() {
+    public TreeMap<Integer, TreeMap<Integer, Model>> getUnitMap() {
         return unitMap;
     }
 
@@ -149,20 +147,20 @@ public class UnitImpl implements Unit {
     private UnitImpl(){
     }
 
-    private UnitImpl(boolean musician, boolean standardBearer, TreeMap<Integer, Map<Integer, Model>> unitMap) {
+    private UnitImpl(boolean musician, boolean standardBearer, TreeMap<Integer, TreeMap<Integer, Model>> unitMap) {
         this.musician = musician;
         this.standardBearer = standardBearer;
         this.unitMap = unitMap;
     }
 
-    public UnitImpl(boolean musician, boolean standardBearer, boolean wonLastFight, TreeMap<Integer, Map<Integer, Model>> unitMap) {
+    public UnitImpl(boolean musician, boolean standardBearer, boolean wonLastFight, TreeMap<Integer, TreeMap<Integer, Model>> unitMap) {
         this.musician = musician;
         this.standardBearer = standardBearer;
         this.wonLastFight = wonLastFight;
         this.unitMap = unitMap;
     }
 
-    public UnitImpl(int unitValue, boolean musician, boolean standardBearer, boolean wonLastFight, TreeMap<Integer, Map<Integer, Model>> unitMap) {
+    public UnitImpl(int unitValue, boolean musician, boolean standardBearer, boolean wonLastFight, TreeMap<Integer, TreeMap<Integer, Model>> unitMap) {
         this.unitValue = unitValue;
         this.musician = musician;
         this.standardBearer = standardBearer;
@@ -170,7 +168,7 @@ public class UnitImpl implements Unit {
         this.unitMap = unitMap;
     }
 
-    private UnitImpl(TreeMap<Integer, Map<Integer, Model>> unitMap) {
+    private UnitImpl(TreeMap<Integer, TreeMap<Integer, Model>> unitMap) {
         this.unitMap = unitMap;
     }
 
@@ -178,6 +176,6 @@ public class UnitImpl implements Unit {
     private boolean musician;
     private boolean standardBearer;
     private boolean wonLastFight;
-    private TreeMap<Integer, Map<Integer, Model>> unitMap = new TreeMap<>();
+    private TreeMap<Integer, TreeMap<Integer, Model>> unitMap = new TreeMap<>();
 
 }
